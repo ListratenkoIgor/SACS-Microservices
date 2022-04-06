@@ -21,7 +21,7 @@ namespace DataService.Data.Repositories
             DbSet = applicationDbContext.Set<TEntity>();
         }
 
-        public async Task<List<TEntity>> GetAllByWhereAsync(Expression<Func<TEntity, bool>> match,
+        public async Task<IEnumerable<TEntity>> GetAllByWhereAsync(Expression<Func<TEntity, bool>> match,
           bool disableTracking = false)
         {
             return disableTracking
@@ -29,7 +29,7 @@ namespace DataService.Data.Repositories
               : await DbSet.Where(match).ToListAsync();
         }
 
-        public async Task<List<TEntity>> GetAllAsync(Func<IQueryable<TEntity>,
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>,
           IIncludableQueryable<TEntity, object>> include = null, bool disableTracking = true)
         {
             IQueryable<TEntity> query = DbSet;

@@ -12,5 +12,10 @@ namespace DataService.Data.Repositories
     {
         public StudentsGroupsRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
+
+        public Task<StudentsGroup> GetGroupByNumber(string groupNumber)
+        {
+            return GetFirstWhereAsync(group => group.Number == groupNumber);
+        }
     }
 }

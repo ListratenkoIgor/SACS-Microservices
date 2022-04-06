@@ -12,5 +12,10 @@ namespace DataService.Data.Repositories
     {
         public EmployeesRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
+
+        public Task<Employee> GetEmployeByUrlId(string urlId)
+        {
+            return GetFirstWhereAsync(employee => employee.UrlId == urlId);
+        }
     }
 }

@@ -8,9 +8,9 @@ using Interfaces.Models;
 
 namespace DataService.Data.Repositories
 {
-    public class FacultysRepository: RepositoryBase<Faculty>
+    public class SpecialitiesRepository: RepositoryBase<Speciality>
     {
-        public FacultysRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public SpecialitiesRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
     }
 }
