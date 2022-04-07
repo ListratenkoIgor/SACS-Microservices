@@ -17,13 +17,21 @@ namespace DataService.Data.Repositories
             return await GetFirstWhereAsync(student=>student.RecordbookNumber==recordBookNumber);
         }
         */
-        public async Task<Student> GetStudentByRecordBook(int recordBookNumber)
+        public Student GetStudentByRecordBook(int recordBookNumber)
         {
-            return await GetFirstWhereAsync(student=>student.RecordbookNumber==recordBookNumber);
+            var query =
+               from stud in ApplicationDbContext.Students
+               where stud.RecordbookNumber == recordBookNumber
+               select stud;
+            return query.FirstOrDefault();
         }
-        public async Task<IEnumerable<Student>> GetStudentsByGroup(string groupNumber)
+        public IEnumerable<Student> GetStudentsByGroup(string groupNumber)
         {
-            return await GetAllByWhereAsync(student=>student.Group.Number== groupNumber);
+            var query =
+               from stud in ApplicationDbContext.Students
+               where stud.Group.Number == groupNumber
+               select stud;
+            return query;
         }
     }
 }

@@ -12,5 +12,22 @@ namespace DataService.Data.Repositories
     {
         public SpecialitiesRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
+
+        public IEnumerable<Speciality> GetSpecialities()
+        {
+            var query =
+               from spec in ApplicationDbContext.Specialities
+               select spec;
+            return query;
+        }
+
+        public Speciality GetSpecialityId(int id)
+        {
+            var query =
+               from spec in ApplicationDbContext.Specialities
+               where spec.Id == id
+               select spec;
+            return query.FirstOrDefault();
+        }
     }
 }

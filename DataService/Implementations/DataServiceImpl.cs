@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Threading.Tasks;
 using Interfaces;
 using Interfaces.Models;
@@ -11,56 +12,56 @@ namespace DataService.Implementations
     public class DataServiceImpl : IDataService
     {
         private UnitOfWork _unitOfWork;
-
         public DataServiceImpl(UnitOfWork unitOfWork) {
             _unitOfWork = unitOfWork;
         }
-        public Task<Employee> GetEmployee(string urlId)
+        
+        public Employee GetEmployee(string urlId)
         {
             return _unitOfWork.Employees.GetEmployeByUrlId(urlId);
         }
 
-        public Task<IEnumerable<Employee>> GetEmployees()
+        public IEnumerable<Employee> GetEmployees()
         {
-            return _unitOfWork.Employees.GetAllAsync();
+            return _unitOfWork.Employees.GetEmployees();
         }
 
-        public Task<IEnumerable<Faculty>> GetFaculties()
+        public IEnumerable<Faculty> GetFaculties()
         {
-            return _unitOfWork.Faculties.GetAllAsync();
+            return _unitOfWork.Faculties.GetFaculties();
         }
 
-        public Task<Faculty> GetFaculty(int id)
+        public Faculty GetFaculty(int id)
         {
-            return _unitOfWork.Faculties.FindAsync(id);
+            return _unitOfWork.Faculties.GetFacultyById(id);
         }
-
-        public Task<StudentsGroup> GetGroup(string groupNumber)
+        
+        public StudentsGroup GetGroup(string groupNumber)
         {
             return _unitOfWork.StudentsGroups.GetGroupByNumber(groupNumber);
         }
 
-        public Task<IEnumerable<StudentsGroup>> GetGroups()
+        public IEnumerable<StudentsGroup> GetGroups()
         {
-            return _unitOfWork.StudentsGroups.GetAllAsync();
+            return _unitOfWork.StudentsGroups.GetGroups();
         }
 
-        public Task<IEnumerable<Speciality>> GetSpecialities()
+        public IEnumerable<Speciality> GetSpecialities()
         {
-            return _unitOfWork.Specialities.GetAllAsync();
+            return _unitOfWork.Specialities.GetSpecialities();
         }
 
-        public Task<Speciality> GetSpeciality(int id)
+        public Speciality GetSpeciality(int id)
         {
-            return _unitOfWork.Specialities.FindAsync(id);
+            return _unitOfWork.Specialities.GetSpecialityId(id);
         }
 
-        public Task<Student> GetStudentByRecordBook(int recordBookNumber)
+        public Student GetStudentByRecordBook(int recordBookNumber)
         {
             return _unitOfWork.Students.GetStudentByRecordBook(recordBookNumber);
         }
 
-        public Task<IEnumerable<Student>> GetStudentsByGroup(string groupNumber)
+        public IEnumerable<Student> GetStudentsByGroup(string groupNumber)
         {
             return _unitOfWork.Students.GetStudentsByGroup(groupNumber);
         }

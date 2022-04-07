@@ -13,9 +13,21 @@ namespace DataService.Data.Repositories
         public EmployeesRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
 
-        public Task<Employee> GetEmployeByUrlId(string urlId)
+        public Employee GetEmployeByUrlId(string urlId)
         {
-            return GetFirstWhereAsync(employee => employee.UrlId == urlId);
+            var query =
+               from employee in ApplicationDbContext.Employees
+               where employee.UrlId == urlId
+               select employee;
+            return query.FirstOrDefault();
+        }
+
+        internal IEnumerable<Employee> GetEmployees()
+        {
+            var query =
+               from employee in ApplicationDbContext.Employees
+               select employee;
+            return query;
         }
     }
 }

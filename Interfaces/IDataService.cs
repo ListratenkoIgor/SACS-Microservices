@@ -10,48 +10,49 @@ namespace Interfaces
 {
     public interface IDataService
     {
+        
         #region Faculty
         [Route("faculties/")]
-        public Task<IEnumerable<Faculty>> GetFaculties();
+        public IEnumerable<Faculty> GetFaculties();
         
-        [Route("faculty/{id}")]
-        public Task<Faculty> GetFaculty(int id);
-        #endregion
-
-        #region Speciality
-        [Route("specialities/")]
-        public Task<IEnumerable<Speciality>> GetSpecialities();
-        
-        [Route("speciality/{id}")]
-        public Task<Speciality> GetSpeciality(int id);
+        [Route("faculties/{id}")]
+        public Faculty GetFaculty(int id);
         #endregion
 
         #region Employee
         [Route("employees/all/")]
-        public Task<IEnumerable<Employee>> GetEmployees();
+        public IEnumerable<Employee> GetEmployees();
         
         [Route("employees/{urlId}")]
-        public Task<Employee> GetEmployee(string urlId);
+        public Employee GetEmployee(string urlId);
+        #endregion
+        
+        #region Speciality
+        [Route("specialities/")]
+        public IEnumerable<Speciality> GetSpecialities();
+        
+        [Route("specialities/{id}")]
+        public Speciality GetSpeciality(int id);
         #endregion
 
         #region StudentGroup
 
         [Route("groups/")]
-        public Task<IEnumerable<StudentsGroup>> GetGroups();
+        public IEnumerable<StudentsGroup> GetGroups();
         
-        [Route("group/{groupNumber}")]
-        public Task<StudentsGroup> GetGroup(string groupNumber);
+        [Route("groups/{groupNumber}")]
+        public StudentsGroup GetGroup(string groupNumber);
         #endregion
 
         #region Student
         [Route("students/group/{groupNumber}")]
-        public Task<IEnumerable<Student>> GetStudentsByGroup(string groupNumber);
+        public IEnumerable<Student> GetStudentsByGroup(string groupNumber);
         /*
         [Route("students/{RecordbookNumber}")]
         public Task<Student> GetStudentByRecordBook(string RecordbookNumber);
         */
         [Route("students/{RecordbookNumber}")]
-        public Task<Student> GetStudentByRecordBook(int recordBookNumber);
+        public Student GetStudentByRecordBook(int recordBookNumber);
         #endregion
 
 

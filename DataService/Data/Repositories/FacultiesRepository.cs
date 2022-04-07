@@ -12,5 +12,22 @@ namespace DataService.Data.Repositories
     {
         public FacultiesRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
+
+        public Faculty GetFacultyById(int id)
+        {
+            var query =
+                from faculty in ApplicationDbContext.Faculties
+                where faculty.Id == id
+                select faculty;
+            return query.FirstOrDefault();
+        }
+
+        public IEnumerable<Faculty> GetFaculties()
+        {
+            var query =
+               from faculty in ApplicationDbContext.Faculties
+               select faculty;
+            return query;
+        }
     }
 }
