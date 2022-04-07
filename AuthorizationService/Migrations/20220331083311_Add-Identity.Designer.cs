@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using AuthorizationService.Authentification;
+using AuthorizationService.Authorization;
 
-namespace AuthorizationService.Migrations.AuthentificationDb
+namespace AuthorizationService.Migrations.AuthorizationDb
 {
-    [DbContext(typeof(AuthentificationDbContext))]
+    [DbContext(typeof(AuthorizationDbContext))]
     [Migration("20220331083311_Add-Identity")]
     partial class AddIdentity
     {

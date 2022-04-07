@@ -1,17 +1,54 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.Storage;
+using DataService.Data.Repositories;
 
 namespace DataService.Data
 {
-    public class UnitofWork : IDisposable
+    public class UnitOfWork : IDisposable
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IDbContextFactory<ApplicationDbContext> _applicationDbContextFactory;
         private bool _disposed = false;
-        public UnitofWork(ApplicationDbContext applicationDbContext)
+
+        private DepartmentsRepository _departmentsRepository;
+        private EducationFormsRepository _educationFormsRepository;
+        private EmployeesRepository _employeesRepository;
+        private FacultiesRepository _facultiesRepository;
+        private SpecialitiesRepository _specialitiesRepository;
+        private StudentsGroupsRepository _studentsGroupsRepository;
+        private StudentsRepository _studentsRepository;
+
+        public UnitOfWork(IServiceProvider serviceProvider)
         {
-            _applicationDbContext = applicationDbContext;
+            _applicationDbContextFactory = (IDbContextFactory<ApplicationDbContext>)serviceProvider.GetService(typeof(IDbContextFactory<ApplicationDbContext>));
+        }
+        private ApplicationDbContext _applicationDbContext;
+        public ApplicationDbContext ApplicationDbContext => _applicationDbContext = _applicationDbContext ?? _applicationDbContextFactory.CreateDbContext();
+
+        public DepartmentsRepository Departments => _departmentsRepository = _departmentsRepository ?? new DepartmentsRepository(ApplicationDbContext);
+        public EducationFormsRepository EducationForms => _educationFormsRepository = _educationFormsRepository ?? new EducationFormsRepository(ApplicationDbContext);
+        public EmployeesRepository Employees => _employeesRepository = _employeesRepository ?? new EmployeesRepository(ApplicationDbContext);
+        public FacultiesRepository Faculties => _facultiesRepository = _facultiesRepository ?? new FacultiesRepository(ApplicationDbContext);
+        public SpecialitiesRepository Specialities => _specialitiesRepository = _specialitiesRepository ?? new SpecialitiesRepository(ApplicationDbContext);
+        public StudentsGroupsRepository StudentsGroups => _studentsGroupsRepository = _studentsGroupsRepository ?? new StudentsGroupsRepository(ApplicationDbContext);
+        public StudentsRepository Students => _studentsRepository = _studentsRepository ?? new StudentsRepository(ApplicationDbContext);
+
+        public async Task<bool> SaveAsync()
+        {
+            try
+            {
+                await ApplicationDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public IDbContextTransaction BeginTransaction()
+        {
+            return ApplicationDbContext.Database.BeginTransaction();
         }
         protected virtual void Dispose(bool disposing)
         {
@@ -19,17 +56,15 @@ namespace DataService.Data
             {
                 if (disposing)
                 {
-                    _applicationDbContext.Dispose();
+                    ApplicationDbContext.Dispose();
                 }
                 _disposed = true;
             }
         }
-
-        ~UnitofWork()
+        ~UnitOfWork()
         {
             Dispose(false);
         }
-
         public void Dispose()
         {
             Dispose(true);

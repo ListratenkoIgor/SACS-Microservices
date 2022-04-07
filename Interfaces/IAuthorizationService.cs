@@ -6,10 +6,11 @@ namespace Interfaces
 {
     public interface IAuthorizationService
     {
-        [Route("login/")]
-        public bool Login();
+        
+        [HttpPost,Route("login/")]
+        public void Login(string Email,string Password,bool RememberMe=true);
 
-        [Route("register/")]
-        public bool Register();
+        [HttpPost, Route("register/")]
+        public void Register(string Email, string Password);
     }
 }

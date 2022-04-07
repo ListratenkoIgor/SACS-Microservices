@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shed.CoreKit.WebApi;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using DataService.Data;
+using DataService.Implementations;
+using Interfaces;
 
 namespace DataService
 {
@@ -26,8 +29,12 @@ namespace DataService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContextFactory<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("LocalDB")));
-            services.AddDbContext<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
+            services.AddDbContextFactory<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
+            //services.AddDbContext<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
+
+            services.AddTransient<UnitOfWork>();
+            services.AddTransient<IDataService, DataServiceImpl>();
+            services.AddCors();
             services.AddControllers();
         }
 
@@ -37,23 +44,27 @@ namespace DataService
             using (var scope = serviceScopeFactory.CreateScope())
             {
                 var appDbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                appDbContext.Database.Migrate();
+                //appDbContext.Database.Migrate();
             }
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-            app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseWebApiEndpoint<IDataService>();
         }
     }
 }

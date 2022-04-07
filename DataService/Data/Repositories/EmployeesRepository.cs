@@ -12,5 +12,22 @@ namespace DataService.Data.Repositories
     {
         public EmployeesRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
+
+        public Employee GetEmployeByUrlId(string urlId)
+        {
+            var query =
+               from employee in ApplicationDbContext.Employees
+               where employee.UrlId == urlId
+               select employee;
+            return query.FirstOrDefault();
+        }
+
+        internal IEnumerable<Employee> GetEmployees()
+        {
+            var query =
+               from employee in ApplicationDbContext.Employees
+               select employee;
+            return query;
+        }
     }
 }
