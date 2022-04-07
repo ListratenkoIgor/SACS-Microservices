@@ -12,11 +12,6 @@ namespace DataService.Data.Repositories
     {
         public StudentsRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
-        /*
-        public async Task<Student> GetStudentByRecordBook(string recordBookNumber) {
-            return await GetFirstWhereAsync(student=>student.RecordbookNumber==recordBookNumber);
-        }
-        */
         public Student GetStudentByRecordBook(int recordBookNumber)
         {
             var query =
@@ -30,6 +25,13 @@ namespace DataService.Data.Repositories
             var query =
                from stud in ApplicationDbContext.Students
                where stud.Group.Number == groupNumber
+               select stud;
+            return query;
+        }
+        public IEnumerable<Student> GetStudents()
+        {
+            var query =
+               from stud in ApplicationDbContext.Students
                select stud;
             return query;
         }

@@ -16,7 +16,7 @@ namespace DataService.Implementations
             _unitOfWork = unitOfWork;
         }
         
-        public Employee GetEmployee(string urlId)
+        public Employee GetEmployeeByUrlId(string urlId)
         {
             return _unitOfWork.Employees.GetEmployeByUrlId(urlId);
         }
@@ -31,12 +31,12 @@ namespace DataService.Implementations
             return _unitOfWork.Faculties.GetFaculties();
         }
 
-        public Faculty GetFaculty(int id)
+        public Faculty GetFacultyById(int id)
         {
             return _unitOfWork.Faculties.GetFacultyById(id);
         }
         
-        public StudentsGroup GetGroup(string groupNumber)
+        public StudentsGroup GetGroupByNumber(string groupNumber)
         {
             return _unitOfWork.StudentsGroups.GetGroupByNumber(groupNumber);
         }
@@ -51,14 +51,19 @@ namespace DataService.Implementations
             return _unitOfWork.Specialities.GetSpecialities();
         }
 
-        public Speciality GetSpeciality(int id)
+        public Speciality GetSpecialityById(int id)
         {
-            return _unitOfWork.Specialities.GetSpecialityId(id);
+            return _unitOfWork.Specialities.GetSpecialityById(id);
         }
 
         public Student GetStudentByRecordBook(int recordBookNumber)
         {
             return _unitOfWork.Students.GetStudentByRecordBook(recordBookNumber);
+        }
+
+        public IEnumerable<Student> GetStudents()
+        {
+            return _unitOfWork.Students.GetStudents();
         }
 
         public IEnumerable<Student> GetStudentsByGroup(string groupNumber)

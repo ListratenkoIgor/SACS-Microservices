@@ -21,7 +21,7 @@ namespace DataService.Data.Repositories
             return query;
         }
 
-        public Speciality GetSpecialityId(int id)
+        public Speciality GetSpecialityById(int id)
         {
             var query =
                from spec in ApplicationDbContext.Specialities

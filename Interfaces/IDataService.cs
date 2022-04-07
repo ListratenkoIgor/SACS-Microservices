@@ -16,7 +16,7 @@ namespace Interfaces
         public IEnumerable<Faculty> GetFaculties();
         
         [Route("faculties/{id}")]
-        public Faculty GetFaculty(int id);
+        public Faculty GetFacultyById(int id);
         #endregion
 
         #region Employee
@@ -24,7 +24,7 @@ namespace Interfaces
         public IEnumerable<Employee> GetEmployees();
         
         [Route("employees/{urlId}")]
-        public Employee GetEmployee(string urlId);
+        public Employee GetEmployeeByUrlId(string urlId);
         #endregion
         
         #region Speciality
@@ -32,7 +32,7 @@ namespace Interfaces
         public IEnumerable<Speciality> GetSpecialities();
         
         [Route("specialities/{id}")]
-        public Speciality GetSpeciality(int id);
+        public Speciality GetSpecialityById(int id);
         #endregion
 
         #region StudentGroup
@@ -41,10 +41,13 @@ namespace Interfaces
         public IEnumerable<StudentsGroup> GetGroups();
         
         [Route("groups/{groupNumber}")]
-        public StudentsGroup GetGroup(string groupNumber);
+        public StudentsGroup GetGroupByNumber(string groupNumber);
         #endregion
 
         #region Student
+        [Route("students/all")]
+        public IEnumerable<Student> GetStudents();
+
         [Route("students/group/{groupNumber}")]
         public IEnumerable<Student> GetStudentsByGroup(string groupNumber);
         /*

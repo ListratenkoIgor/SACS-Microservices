@@ -60,11 +60,18 @@ namespace DataService
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            //app.UseMvc();
+            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseWebApiEndpoint<IDataService>();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(name: "common",pattern: "{controller}/{action}/{id?}");
+            });
+            
+            //app.UseWebApiEndpoint<IDataService>();
         }
     }
 }
