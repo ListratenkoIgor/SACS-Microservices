@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataService.Data;
 using Interfaces.Models;
 using Interfaces;
-using DataService.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,35 +13,35 @@ namespace DataService.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class FacultyController : ControllerBase
+    public class StudentsGroupsController : ControllerBase
     {
         private readonly UnitOfWork _unitOfWork;
-        public FacultyController(UnitOfWork unitOfWork)
+        public StudentsGroupsController(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
         [HttpGet]
-        public IEnumerable<Faculty> GetFaculties() => _unitOfWork.Faculties.GetFaculties();
+        public IEnumerable<StudentsGroup> GetGroups() => _unitOfWork.StudentsGroups.GetGroups();
 
-        [HttpGet("{id}")]
-        public Faculty GetFacultyById(int id) => _unitOfWork.Faculties.GetFacultyById(id);
+        [HttpGet("{groupNumber}")]
+        public StudentsGroup GetGroupByNumber(string groupNumber) => _unitOfWork.StudentsGroups.GetGroupByNumber(groupNumber);
 
         [HttpPost]
-        public void Post([FromBody] Faculty faculty)
+        public void Post([FromBody] StudentsGroup qroup)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
-                _unitOfWork.Faculties.Add(faculty);
+                _unitOfWork.StudentsGroups.Add(qroup);
                 _unitOfWork.SaveAsync().Wait();
             }
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Faculty faculty)
+        public void Put(int id, [FromBody] StudentsGroup value)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
-                _unitOfWork.Faculties.Update(faculty);
+                _unitOfWork.StudentsGroups.Update(value);
                 _unitOfWork.SaveAsync().Wait();
             }
         }
@@ -51,9 +51,9 @@ namespace DataService.Controllers
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
-                var qroup = _unitOfWork.Faculties.FindAsync(id);
+                var qroup = _unitOfWork.StudentsGroups.FindAsync(id);
                 qroup.Wait();
-                _unitOfWork.Faculties.Remove(qroup.Result);
+                _unitOfWork.StudentsGroups.Remove(qroup.Result);
                 _unitOfWork.SaveAsync().Wait();
             }
         }

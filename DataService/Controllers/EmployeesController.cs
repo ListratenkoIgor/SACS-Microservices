@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interfaces.Models;
 using Interfaces;
+using DataService.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,33 +15,47 @@ namespace DataService.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly IDataService _dataService;
-        public EmployeesController(IDataService service)
+        private readonly UnitOfWork _unitOfWork;
+        public EmployeesController(UnitOfWork unitOfWork)
         {
-            _dataService = service;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet]
-        public IEnumerable<Employee> GetEmployees() => _dataService.GetEmployees();
+        public IEnumerable<Employee> GetEmployees() => _unitOfWork.Employees.GetEmployees();
 
         [HttpGet("{urlId}")]
-        public Employee GetEmployeeByUrlId(string urlId) => _dataService.GetEmployeeByUrlId(urlId);
+        public Employee GetEmployeeByUrlId(string urlId) => _unitOfWork.Employees.GetEmployeeByUrlId(urlId);
 
-        // POST api/<EmployeesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Employee employee)
         {
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                _unitOfWork.Employees.Add(employee);
+                _unitOfWork.SaveAsync().Wait();
+            }
         }
 
-        // PUT api/<EmployeesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Employee employee)
         {
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                _unitOfWork.Employees.Update(employee);
+                _unitOfWork.SaveAsync().Wait();
+            }
         }
 
-        // DELETE api/<EmployeesController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                var employee = _unitOfWork.Employees.FindAsync(id);
+                employee.Wait();
+                _unitOfWork.Employees.Remove(employee.Result);
+                _unitOfWork.SaveAsync().Wait();
+            }
         }
     }
 }

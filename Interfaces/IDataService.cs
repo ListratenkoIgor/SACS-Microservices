@@ -50,12 +50,13 @@ namespace Interfaces
 
         [Route("students/group/{groupNumber}")]
         public IEnumerable<Student> GetStudentsByGroup(string groupNumber);
+        
+        [Route("students/{RecordbookNumber}")]
+        public Student GetStudentByRecordBook(string RecordbookNumber);
         /*
         [Route("students/{RecordbookNumber}")]
-        public Task<Student> GetStudentByRecordBook(string RecordbookNumber);
+        public Student GetStudentByRecordBook(int recordBookNumber); 
         */
-        [Route("students/{RecordbookNumber}")]
-        public Student GetStudentByRecordBook(int recordBookNumber);
         #endregion
 
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interfaces.Models;
+using DataService.Data;
 using Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,10 +15,10 @@ namespace DataService.Controllers
     [ApiController]
     public class DepartmentsController : ControllerBase
     {
-        private readonly IDataService _dataService;
-        public DepartmentsController(IDataService service)
+        private readonly UnitOfWork _unitOfWork;
+        public DepartmentsController(UnitOfWork unitOfWork)
         {
-            _dataService = service;
+            _unitOfWork = unitOfWork;
         }
         //[HttpGet]
         //public IEnumerable<Department> GetGroups() => _dataService.GetGroups();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interfaces.Models;
-using Interfaces;
+using DataService.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,33 +14,47 @@ namespace DataService.Controllers
     [ApiController]
     public class SpecialityController : ControllerBase
     {
-        private readonly IDataService _dataService;
-        public SpecialityController(IDataService service)
+        private readonly UnitOfWork _unitOfWork;
+        public SpecialityController(UnitOfWork unitOfWork)
         {
-            _dataService = service;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet]
-        public IEnumerable<Speciality> GetSpecialities() => _dataService.GetSpecialities();
+        public IEnumerable<Speciality> GetSpecialities() => _unitOfWork.Specialities.GetSpecialities();
 
         [HttpGet("{id}")]
-        public Speciality GetSpecialityById(int id) => _dataService.GetSpecialityById(id);
+        public Speciality GetSpecialityById(int id) => _unitOfWork.Specialities.GetSpecialityById(id);
 
-        // POST api/<SpecialityController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Speciality speciality)
         {
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                _unitOfWork.Specialities.Add(speciality);
+                _unitOfWork.SaveAsync().Wait();
+            }
         }
 
-        // PUT api/<SpecialityController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Speciality speciality)
         {
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                _unitOfWork.Specialities.Update(speciality);
+                _unitOfWork.SaveAsync().Wait();
+            }
         }
-
-        // DELETE api/<SpecialityController>/5
+      
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                var qroup = _unitOfWork.Specialities.FindAsync(id);
+                qroup.Wait();
+                _unitOfWork.Specialities.Remove(qroup.Result);
+                _unitOfWork.SaveAsync().Wait();
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace DataService.Data.Repositories
     {
         public StudentsRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
-        public Student GetStudentByRecordBook(int recordBookNumber)
+        public Student GetStudentByRecordBook(string recordBookNumber)
         {
             var query =
                from stud in ApplicationDbContext.Students

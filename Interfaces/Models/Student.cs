@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Interfaces.Models
-{ 
+{
     [Index(nameof(RecordbookNumber), IsUnique = true, Name = "IX_Students_RecordbookNumber")]
     public class Student : IEntity
     {
@@ -22,7 +22,7 @@ namespace Interfaces.Models
         public string MiddleName { get; set; }
 
         [Required]
-        public int RecordbookNumber { get; set; }
+        public string RecordbookNumber { get; set; }
         
         [Required]
         public virtual StudentsGroup Group { get; set; }

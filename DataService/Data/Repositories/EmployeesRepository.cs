@@ -13,7 +13,7 @@ namespace DataService.Data.Repositories
         public EmployeesRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         { }
 
-        public Employee GetEmployeByUrlId(string urlId)
+        public Employee GetEmployeeByUrlId(string urlId)
         {
             var query =
                from employee in ApplicationDbContext.Employees

@@ -43,6 +43,7 @@ namespace DataService.Data
             }
             catch
             {
+                throw;
                 return false;
             }
         }
