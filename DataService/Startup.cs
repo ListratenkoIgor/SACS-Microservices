@@ -12,7 +12,6 @@ using Shed.CoreKit.WebApi;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using DataService.Data;
-using DataService.Implementations;
 using Interfaces;
 
 namespace DataService
@@ -33,7 +32,6 @@ namespace DataService
             //services.AddDbContext<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
 
             services.AddTransient<UnitOfWork>();
-            services.AddTransient<IDataService, DataServiceImpl>();
             services.AddCors();
             services.AddControllers();
         }
@@ -43,7 +41,7 @@ namespace DataService
         {
             using (var scope = serviceScopeFactory.CreateScope())
             {
-                var appDbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                //var appDbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 //appDbContext.Database.Migrate();
             }
             if (env.IsDevelopment())
