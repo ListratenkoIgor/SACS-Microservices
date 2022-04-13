@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataService.Data;
 using Interfaces.Models;
+using Interfaces.DTOs;
 using Interfaces;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,13 +15,9 @@ namespace DataService.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class StudentsGroupsController : ControllerBase
+    public class StudentsGroupsController : MyControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
-        public StudentsGroupsController(UnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public StudentsGroupsController(UnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
         [HttpGet]
         public IEnumerable<StudentsGroup> GetGroups() => _unitOfWork.StudentsGroups.GetGroups();
 

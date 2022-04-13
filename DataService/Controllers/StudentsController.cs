@@ -4,29 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interfaces.Models;
-using Interfaces;
+using Interfaces.DTOs;
 using DataService.Data;
-
+using AutoMapper;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DataService.Controllers
 {
-    public class StudentDTO {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string MiddleName { get; set; }
-        public string RecordbookNumber { get; set; }
-        public string GroupNum { get; set; }
-    }
     [Route("[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class StudentsController : MyControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
-        public StudentsController(UnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public StudentsController(UnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
         [HttpGet("all")]
         public IEnumerable<Student> GetStudents() => _unitOfWork.Students.GetStudents();
         [HttpGet("group/{groupNumber}")]
@@ -48,12 +37,14 @@ namespace DataService.Controllers
             }
         }
         */
+     
         [HttpPost]
-        public void Post([FromBody] StudentDTO studentDTO)
+        public void Post([FromBody] StudentDto studentDTO)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
-                var group = _unitOfWork.StudentsGroups.GetGroupByNumber(studentDTO.GroupNum);
+                /*
+                var group = _unitOfWork.StudentsGroups.GetGroupByNumber(studentDTO.Group);
                 Student student = new Student
                 {
                     FirstName = studentDTO.FirstName,
@@ -64,15 +55,16 @@ namespace DataService.Controllers
                 };
                 _unitOfWork.Students.Add(student);
                 _unitOfWork.SaveAsync().Wait();
+                */
             }
         }
-
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Student value)
+        public void Put(int id, [FromBody] StudentDto value)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
-                _unitOfWork.Students.Update(value);
+                var stud = _unitOfWork.Students.GetFirstWhere(s => s.Id == value.Id);
+                _unitOfWork.Students.Update(stud);
                 _unitOfWork.SaveAsync().Wait();
             }
         }

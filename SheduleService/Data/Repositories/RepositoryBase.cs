@@ -5,9 +5,10 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using SheduleModelsLib.Models;
 using Interfaces.Models;
 
-namespace DataService.Data.Repositories
+namespace SheduleService.Data.Repositories
 {
     public abstract class RepositoryBase<TEntity>
       where TEntity : class, IEntity

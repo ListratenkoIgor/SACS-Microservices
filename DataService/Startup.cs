@@ -4,15 +4,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Shed.CoreKit.WebApi;
-using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using DataService.Data;
 using Interfaces;
+using Interfaces.Helpers;
 
 namespace DataService
 {
@@ -30,7 +26,7 @@ namespace DataService
         {
             services.AddDbContextFactory<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
             //services.AddDbContext<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
-
+            services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddTransient<UnitOfWork>();
             services.AddCors();
             services.AddControllers();

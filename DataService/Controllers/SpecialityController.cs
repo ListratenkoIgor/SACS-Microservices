@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interfaces.Models;
 using DataService.Data;
+using Interfaces.DTOs;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,13 +14,9 @@ namespace DataService.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class SpecialityController : ControllerBase
+    public class SpecialityController : MyControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
-        public SpecialityController(UnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public SpecialityController(UnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
         [HttpGet]
         public IEnumerable<Speciality> GetSpecialities() => _unitOfWork.Specialities.GetSpecialities();
 
@@ -26,20 +24,23 @@ namespace DataService.Controllers
         public Speciality GetSpecialityById(int id) => _unitOfWork.Specialities.GetSpecialityById(id);
 
         [HttpPost]
-        public void Post([FromBody] Speciality speciality)
+        public void Post([FromBody] SpecialityDto value)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
+                var speciality = _mapper.Map<Speciality>(value);
+                
                 _unitOfWork.Specialities.Add(speciality);
                 _unitOfWork.SaveAsync().Wait();
             }
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Speciality speciality)
+        public void Put(int id, [FromBody] SpecialityDto value)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
+                var speciality = _mapper.Map<Speciality>(value);
                 _unitOfWork.Specialities.Update(speciality);
                 _unitOfWork.SaveAsync().Wait();
             }

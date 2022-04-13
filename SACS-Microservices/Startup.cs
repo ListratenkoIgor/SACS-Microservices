@@ -28,12 +28,13 @@ namespace SACS_Microservices
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
+            //services.AddControllers();
             services.AddTransient<HttpClient>();
-            services.AddWebApiEndpoints(
+            /*services.AddWebApiEndpoints(
                 new WebApiEndpoint<IAuthorizationService>(new System.Uri("http://localhost:5001")),
-                new WebApiEndpoint<IDataService>(new System.Uri("http://localhost:5002")));
+                new WebApiEndpoint<IDataService>(new System.Uri("http://localhost:5002")));*/
 
         }
 
@@ -44,12 +45,19 @@ namespace SACS_Microservices
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
-            app.UseWebApiRedirect("api/Account", new WebApiEndpoint<IAuthorizationService>(new System.Uri("http://localhost:5001")));
-            app.UseWebApiRedirect("api/v1", new WebApiEndpoint<IDataService>(new System.Uri("http://localhost:5002")));
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
+            });
+            //app.UseWebApiRedirect("api/Account", new WebApiEndpoint<IAuthorizationService>(new System.Uri("http://localhost:5001")));
+            //app.UseWebApiRedirect("api/v1", new WebApiEndpoint<IDataService>(new System.Uri("http://localhost:5002")));
             //app.UseWebApiRedirect("api/logs", new WebApiEndpoint<IActivityLogger>(new System.Uri("http://localhost:5003")));
         }
     }
