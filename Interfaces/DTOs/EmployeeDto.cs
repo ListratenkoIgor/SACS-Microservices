@@ -22,6 +22,6 @@ namespace Interfaces.DTOs
 
         public string UrlId { get; set; }
 
-        public ICollection<DepartmentDto> AcademicDepartment { get; set; }
+        public List<int> AcademicDepartment { get; set; }
     }
 }

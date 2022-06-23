@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using DataService.Data;
+using AutoMapper;
 using Interfaces;
-using Interfaces.Helpers;
+using DataService.Helpers;
 
 namespace DataService
 {
@@ -21,12 +22,39 @@ namespace DataService
 
         public IConfiguration Configuration { get; }
 
+        private Mapper _mapper;
+
         // This method gets called by the runtime. Use this method to add services to the container.
+
+        /*
+                No connection strings?
+        ⠀⣞⢽⢪⢣⢣⢣⢫⡺⡵⣝⡮⣗⢷⢽⢽⢽⣮⡷⡽⣜⣜⢮⢺⣜⢷⢽⢝⡽⣝
+        ⠸⡸⠜⠕⠕⠁⢁⢇⢏⢽⢺⣪⡳⡝⣎⣏⢯⢞⡿⣟⣷⣳⢯⡷⣽⢽⢯⣳⣫⠇
+        ⠀⠀⢀⢀⢄⢬⢪⡪⡎⣆⡈⠚⠜⠕⠇⠗⠝⢕⢯⢫⣞⣯⣿⣻⡽⣏⢗⣗⠏⠀
+        ⠀⠪⡪⡪⣪⢪⢺⢸⢢⢓⢆⢤⢀⠀⠀⠀⠀⠈⢊⢞⡾⣿⡯⣏⢮⠷⠁⠀⠀
+        ⠀⠀⠀⠈⠊⠆⡃⠕⢕⢇⢇⢇⢇⢇⢏⢎⢎⢆⢄⠀⢑⣽⣿⢝⠲⠉⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⡿⠂⠠⠀⡇⢇⠕⢈⣀⠀⠁⠡⠣⡣⡫⣂⣿⠯⢪⠰⠂⠀⠀⠀⠀
+        ⠀⠀⠀⠀⡦⡙⡂⢀⢤⢣⠣⡈⣾⡃⠠⠄⠀⡄⢱⣌⣶⢏⢊⠂⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⢝⡲⣜⡮⡏⢎⢌⢂⠙⠢⠐⢀⢘⢵⣽⣿⡿⠁⠁⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠨⣺⡺⡕⡕⡱⡑⡆⡕⡅⡕⡜⡼⢽⡻⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⣼⣳⣫⣾⣵⣗⡵⡱⡡⢣⢑⢕⢜⢕⡝⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⣴⣿⣾⣿⣿⣿⡿⡽⡑⢌⠪⡢⡣⣣⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⡟⡾⣿⢿⢿⢵⣽⣾⣼⣘⢸⢸⣞⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀
+        */
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextFactory<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
-            //services.AddDbContext<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
-            services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DataDB")));
+            //ApplicationDbContext context = (ApplicationDbContext)services.BuildServiceProvider().GetService(typeof(ApplicationDbContext));
+            //ApplicationDbContextFactory contextFactory = (ApplicationDbContextFactory)services.BuildServiceProvider().GetService(typeof(ApplicationDbContextFactory));
+            
+            ApplicationDbContext context = (ApplicationDbContext)services.BuildServiceProvider().GetService(typeof(ApplicationDbContext));
+            var mapperBuilder = new MapperBuilder(context);
+            _mapper = mapperBuilder.Build();
+            services.AddScoped<IMapper>(x => _mapper);
+            
+            //services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddTransient<UnitOfWork>();
             services.AddCors();
             services.AddControllers();
@@ -37,8 +65,9 @@ namespace DataService
         {
             using (var scope = serviceScopeFactory.CreateScope())
             {
-                //var appDbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                //appDbContext.Database.Migrate();
+                var appDbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                appDbContext.Database.EnsureDeleted();
+                appDbContext.Database.Migrate();
             }
             if (env.IsDevelopment())
             {

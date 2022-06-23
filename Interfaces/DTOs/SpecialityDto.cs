@@ -12,9 +12,9 @@ namespace Interfaces.DTOs
         
         public string Name { get; set; }
        
-        public FacultyDto Faculty { get; set; }
+        public int FacultyId { get; set; }
         
-        public EducationFormDto EducationForm { get; set; }
+        public int EducationFormId { get; set; }
 
         public string Code { get; set; }
     }

@@ -8,6 +8,7 @@ using SheduleModelsLib.Models;
 using SheduleModelsLib.Helpers;
 using SheduleService.Data;
 using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SheduleService.Controllers
 {
@@ -15,9 +16,11 @@ namespace SheduleService.Controllers
     {
         protected UnitOfWork _unitOfWork;
         protected IMapper _mapper;
-        public MyControllerBase(UnitOfWork unitOfWork, IMapper mapper) {
+        protected IServiceScopeFactory _serviceScopeFactory;
+        public MyControllerBase(UnitOfWork unitOfWork, IMapper mapper, IServiceScopeFactory serviceScopeFactory) {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _serviceScopeFactory = serviceScopeFactory;
         }
     }
 }

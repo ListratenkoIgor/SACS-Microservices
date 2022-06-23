@@ -18,7 +18,7 @@ namespace Interfaces.DTOs
 
         public string RecordbookNumber { get; set; }
 
-        public StudentsGroupDto Group { get; set; }
+        public int GroupId { get; set; }
 
     }
 }

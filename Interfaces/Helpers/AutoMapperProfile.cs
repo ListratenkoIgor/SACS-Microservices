@@ -26,6 +26,7 @@ namespace Interfaces.Helpers
         
         public AutoMapperProfile()
         {
+            /*
             CreateMap<Department,DepartmentDto>().ReverseMap();
             CreateMap<EducationForm,EducationFormDto>().ReverseMap();
             CreateMap<Employee, EmployeeDto>()
@@ -48,6 +49,7 @@ namespace Interfaces.Helpers
                //.ForMember(dest=>dest.Group, opt => opt.MapFrom(src => new StudentsGroup()));
             CreateMap<StudentsGroupDto, StudentsGroup>();
                // .ForMember(dest => dest.Speciality, opt => opt.MapFrom(src => new Speciality()));
+            */
         }
     }
 }

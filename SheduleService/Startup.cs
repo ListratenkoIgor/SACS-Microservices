@@ -9,6 +9,7 @@ using SheduleService.Data;
 using AutoMapper;
 using Hangfire;
 using Hangfire.SqlServer;
+using SheduleService.Helpers;
 
 namespace SheduleService
 {
@@ -31,7 +32,6 @@ namespace SheduleService
             services.AddCors();
             services.AddControllers();
 
-
             services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
@@ -45,6 +45,7 @@ namespace SheduleService
                     DisableGlobalLocks = true
                 }));
 
+            services.AddSingleton<UpdateStoreService>();
             // Add the processing server as IHostedService
             services.AddHangfireServer();
         }

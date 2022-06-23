@@ -12,11 +12,65 @@ namespace SheduleModelsLib.Models.JsonModels
     public class DownStreamShedule: StudentShedule
     {
     }
-    public class DayShedule {
-        [JsonProperty("weekDay")]
-        public string WeekDay { get; set; }
+    public class Day
+    {
         [JsonProperty("schedule")]
         public virtual List<Pair> Pairs { get; set; }
+    }
+    public class DayShedule {
+        //[JsonProperty("weekDay")]
+        //public Day WeekDay { get; set; }
+        //public virtual List<Pair> Pairs { get; set; }
+        [JsonProperty("weekNumber")]
+        public List<int> WeekNumber { get; set; }
+
+        [JsonProperty("studentGroup")]
+        public List<string> StudentsGroup { get; set; }
+
+        [JsonProperty("studentGroupInformation")]
+        public List<string> StudentsGroupInformation { get; set; }
+
+        [JsonProperty("numSubgroup")]
+        public int NumSubGroup { get; set; }
+
+        [JsonProperty("auditory")]
+        public List<string> Auditory { get; set; }
+
+        [JsonProperty("lessonTime")]
+        public string LessonTime { get; set; }
+
+        [JsonProperty("startLessonTime")]
+        public string StartLessonTime { get; set; }
+
+        [JsonProperty("endLessonTime")]
+        public string EndLessonTime { get; set; }
+
+        [JsonProperty("gradebookLesson")]
+        public object GradeBookLesson { get; set; }
+
+        [JsonProperty("subject")]
+        public string Subject { get; set; }
+
+        [JsonProperty("subjectFullName")]
+        public string SubjectFullName { get; set; }
+
+        [JsonProperty("note")]
+        public string Note { get; set; }
+
+        [JsonProperty("lessonType")]
+        public string LessonType { get; set; }
+
+        [JsonProperty("employee")]
+        public virtual List<JsonEmployee> Employee { get; set; }
+
+        [JsonProperty("studentGroupModelList")]
+        public object StudentGroupModelList { get; set; }
+
+        [JsonProperty("gradebookLessonlist")]
+        public object GradeBookLessonList { get; set; }
+
+        [JsonProperty("zaoch")]
+        public bool Zaoch { get; set; }
     }
     public class Pair : IEntity
     {        
@@ -100,16 +154,16 @@ namespace SheduleModelsLib.Models.JsonModels
         [JsonProperty("currentWeekNumber")]
         public int? CurrentWeekNumber { get; set; }
        
-        [JsonProperty("dateStart")]
+        [JsonProperty("startDate")]
         public string DateStart { get; set; }
 
-        [JsonProperty("dateEnd")]
+        [JsonProperty("endDate")]
         public string DateEnd { get; set; }
 
-        [JsonProperty("sessionStart")]
+        [JsonProperty("startExamDate")]
         public string SessionStart { get; set; }
         
-        [JsonProperty("sessionEnd")]
+        [JsonProperty("endExamDate")]
         public string SessionEnd { get; set; }
         /*
          {

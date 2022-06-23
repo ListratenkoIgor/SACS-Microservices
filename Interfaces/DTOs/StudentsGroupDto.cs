@@ -12,6 +12,6 @@ namespace Interfaces.DTOs
 
         public string Number { get; set; }
         
-        public SpecialityDto Speciality { get; set; }
+        public int SpecialityId { get; set; }
     }
 }

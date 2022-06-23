@@ -13,6 +13,8 @@ using System.Net.Http;
 using Newtonsoft;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Microsoft.Extensions.DependencyInjection;
+using SheduleService.Data.Models;
 
 namespace SheduleService.Controllers
 {
@@ -20,8 +22,47 @@ namespace SheduleService.Controllers
     [ApiController]
     public class TestController : MyControllerBase
     {
-        public TestController(UnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
-        [HttpGet("StudentGroup/{group}")]
+        private string SendRequest(string URL) {
+            HttpClient client = new HttpClient();
+            var response = client.GetAsync(new Uri(URL));
+            response.Wait();
+            var content = response.Result.Content.ReadAsStringAsync();
+            content.Wait();
+            return content.Result;
+        }
+        private Task<HttpResponseMessage> SendRequestAsync(string URL)
+        {
+            HttpClient client = new HttpClient();
+            var response = client.GetAsync(new Uri(URL));
+            return response;
+        }
+        public UpdateInfo GetUpdateInfo(string URL,int Id) {
+            var datejson = SendRequest(URL + Id.ToString());
+            var date = JsonConvert.DeserializeObject<DateTime>(datejson, new JsonSerializerSettings
+            {
+                DateFormatHandling = DateFormatHandling.IsoDateFormat
+            });
+            //dd.mm.yyyy
+            return null;
+        } 
+        public TestController(UnitOfWork unitOfWork, IMapper mapper, IServiceScopeFactory serviceScopeFactory) : base(unitOfWork, mapper, serviceScopeFactory) { }
+        [HttpGet("CheckUpdate")]
+        public void CheckUpdate()
+        {
+            var DataServiceUrl = "http://localhost:53588/";
+            var BsuirApiUrl = "https://iis.bsuir.by/api/v1/";
+            var EmployeesJson = SendRequest(DataServiceUrl + "Employees");
+            var Employees = JsonConvert.DeserializeObject<List<Employee>>(EmployeesJson);
+            var GroupsJson = SendRequest(DataServiceUrl + "StudentsGroups");
+            var Groups = JsonConvert.DeserializeObject<List<StudentsGroup>>(GroupsJson);
+            UpdateList list = new UpdateList();
+
+            var Url = "employee?id=";
+            Parallel.ForEach<Employee>(Employees, x => list.EmployeesToUpdate.Add(GetUpdateInfo(BsuirApiUrl + Url, x.Id)));
+            Url = "student-group?id=";
+            Parallel.ForEach<StudentsGroup>(Groups, x => list.EmployeesToUpdate.Add(GetUpdateInfo(BsuirApiUrl + Url, x.Id)));
+        }
+        [HttpGet("Shedule/StudentGroup/{group}")]
         public DownStreamShedule GetShedulesByGroup(string group) {
             HttpClient client = new HttpClient();
              var response = client.GetAsync(new Uri("https://iis.bsuir.by/api/v1/schedule?studentGroup="+group));
@@ -33,7 +74,7 @@ namespace SheduleService.Controllers
             DownStreamShedule shedule = JsonConvert.DeserializeObject<DownStreamShedule>(content.Result);
             return shedule;
         }
-        [HttpGet("Employee/{Uid}")]
+        [HttpGet("Shedule/Employee/{Uid}")]
         public DownStreamShedule GetShedulesByUId(string Uid)
         {
             HttpClient client = new HttpClient();
