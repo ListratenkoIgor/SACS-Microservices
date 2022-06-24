@@ -6,6 +6,7 @@ namespace Interfaces.Models
 {
     public class StudentsGroup:IEntity
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Required]
         public int Id { get; set; }
 

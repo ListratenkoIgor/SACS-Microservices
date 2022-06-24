@@ -66,7 +66,6 @@ namespace DataService
             using (var scope = serviceScopeFactory.CreateScope())
             {
                 var appDbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                appDbContext.Database.EnsureDeleted();
                 appDbContext.Database.Migrate();
             }
             if (env.IsDevelopment())

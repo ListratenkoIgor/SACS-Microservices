@@ -6,7 +6,7 @@ namespace Interfaces.Models
 {
     public class Faculty : IEntity
     {
-        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Required]
         public int Id { get; set; }
 

@@ -8,7 +8,7 @@ namespace Interfaces.Models
     [Index(nameof(RecordbookNumber), IsUnique = true, Name = "IX_Students_RecordbookNumber")]
     public class Student : IEntity
     {
-        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Required]
         public int Id { get; set; }
 

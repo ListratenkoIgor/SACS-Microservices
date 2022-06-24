@@ -9,7 +9,7 @@ namespace Interfaces.Models
     [Index(nameof(UrlId), IsUnique = true, Name = "IX_Employees_UrlId")]
     public class Employee : IEntity
     {
-        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Required]
         public int Id { get; set; }
 
